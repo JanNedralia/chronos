@@ -48,3 +48,7 @@ The terraform project need to be initialized first.
 
 Deploy the project and perform the resource changes by using apply.
 `terraform apply`
+
+# Amplify
+
+## Webhook
