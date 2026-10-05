@@ -1,53 +1,255 @@
 .header {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+}
+
+.header h2 {
+  font-size: 1.1rem;
+  letter-spacing: -0.025em;
+}
+
+.header p,
+.breakdownHeader p {
+  margin-top: 0.2rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.reportControls {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.75rem;
 }
 
 .dateRange {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    width: 300px;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.dateRange label {
+  display: grid;
+  gap: 0.3rem;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.dateRange input,
+.select {
+  min-height: 2.55rem;
+  padding: 0.45rem 0.65rem;
+  border: 1px solid var(--border);
+  border-radius: 0.65rem;
+  color: var(--foreground);
+  background: #0b1728;
+}
+
+.dateRange input:focus,
+.select:focus {
+  border-color: var(--accent);
+  outline: 2px solid rgba(104, 168, 255, 0.18);
+  outline-offset: 1px;
 }
 
 .select {
-    width: 150px;
-    padding: 0.5rem;
-    font-size: 16px;
-    color: #333;
-    background-color: #f2f2f2;
-    border: none;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: box-shadow 0.3s ease;
+  min-width: 8rem;
+  cursor: pointer;
+}
+
+.summary {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.statCard {
+  display: grid;
+  gap: 0.45rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.85rem;
+  background: rgba(8, 17, 31, 0.45);
+}
+
+.statCard span {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.statCard strong {
+  color: #f3f7ff;
+  font-size: 1.55rem;
+  letter-spacing: -0.045em;
+  line-height: 1.2;
+}
+
+.statCard small {
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+.breakdown {
+  width: 100%;
+  padding: 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: 0.9rem;
+  background: rgba(8, 17, 31, 0.42);
+}
+
+.breakdownHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.1rem;
+}
+
+.breakdownHeader h3 {
+  font-size: 0.95rem;
+}
+
+.chart {
+  display: grid;
+  gap: 1rem;
+}
+
+.chartRow {
+  min-width: 0;
+}
+
+.chartLabel {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.45rem;
+}
+
+.chartLabel span {
+  overflow: hidden;
+  color: #dce6f5;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chartLabel strong {
+  flex: none;
+  color: #c2d5f2;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.barTrack {
+  height: 0.5rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #1b2b40;
+}
+
+.bar {
+  height: 100%;
+  min-width: 0.35rem;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #347bf2, #73b7ff);
+  box-shadow: 0 0 14px rgba(69, 145, 255, 0.28);
+  transition: width 250ms ease;
+}
+
+.emptyState {
+  padding: 0.75rem 0;
+  color: var(--muted);
 }
 
 .tableList {
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 25px;
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .projectsTable {
-    width: calc(25% - 25px);
-    border-collapse: collapse;
-    margin-top: 1rem;
+  width: calc(25% - 0.75rem);
+  margin-top: 0.5rem;
+}
 
-    @media screen and (max-width: 1150px) {
-        width: calc(50% - 25px);
-    }
-
-    @media screen and (max-width: 750px) {
-        width: 100%
-    }
+.projectsTable h3 {
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
 }
 
 .actionColumn {
-    width: 25px;
-    border: none;
+  width: 2.5rem;
+  text-align: center;
+}
+
+.actionColumn button {
+  min-width: 1.9rem;
+  min-height: 1.9rem;
+}
+
+@media screen and (max-width: 1050px) {
+  .projectsTable {
+    width: calc(50% - 0.5rem);
+  }
+}
+
+@media screen and (max-width: 760px) {
+  .header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .reportControls {
+    width: 100%;
+    align-items: stretch;
+    flex-wrap: wrap;
+  }
+
+  .dateRange {
+    flex: 1;
+  }
+
+  .dateRange label,
+  .dateRange input {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .select {
+    flex: 1;
+  }
+}
+
+@media screen and (max-width: 520px) {
+  .summary {
+    grid-template-columns: 1fr;
+    gap: 0.6rem;
+  }
+
+  .statCard {
+    padding: 0.8rem 0.95rem;
+  }
+
+  .statCard strong {
+    font-size: 1.3rem;
+  }
+
+  .breakdown {
+    padding: 1rem;
+  }
+
+  .dateRange {
+    width: 100%;
+    flex-basis: 100%;
+  }
+
+  .projectsTable {
+    width: 100%;
+  }
 }

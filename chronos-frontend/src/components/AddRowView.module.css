@@ -1,23 +1,41 @@
 .field {
-    align-self: stretch;
-    flex-grow: 1;
-    background-color: #f2f2f2;
-    border: none;
-    border-radius: 5px;
-    padding: 0.5rem;
-    font-size: 16px;
-    color: #333;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: box-shadow 0.3s ease;
-    margin-left: 1rem;
-
-    @media screen and (max-width: 950px) {
-        margin-left: 0;
-    }
+    min-width: 0;
+    flex: 1;
+    padding: 0.65rem 0.8rem;
+    border: 1px solid var(--border);
+    border-radius: 0.65rem;
+    color: var(--foreground);
+    background: #0b1728;
 }
   
 .field:focus {
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    border-color: var(--accent);
+    outline: 2px solid rgba(104, 168, 255, 0.18);
+    outline-offset: 1px;
+}
+
+.rowItem {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    gap: 0.65rem;
+    margin-top: 0.5rem;
+}
+
+.rowItem h3 {
+    flex: none;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+@media screen and (max-width: 480px) {
+    .rowItem {
+        flex-wrap: wrap;
+    }
+
+    .rowItem h3 {
+        width: 100%;
+    }
 }
 
 .rowItem {
