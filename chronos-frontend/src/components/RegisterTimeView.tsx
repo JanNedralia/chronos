@@ -103,7 +103,6 @@ function RegisterTimeView({
         </label>
         <div className={styles.calendar}>
           <span className={styles.fieldLabel}>Date</span>
-          {/* TODO: Hide this initially and just register time for today. Also expose a button to change date if needed. */}
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DateCalendar views={['day']} onChange={onSetDate} />
           </LocalizationProvider>
