@@ -236,10 +236,13 @@ export default function MainView() {
     <main className={styles.main}>
       <header className={styles.header}>
         <div className={styles.row}>
-          <h1>Chronos</h1>
+          <div className={styles.brand}>
+            <span className={styles.brandMark} aria-hidden="true">C</span>
+            <h1>Chronos</h1>
+          </div>
           <button className={styles.logout} onClick={logout}>Logout</button>
         </div>
-        <p>Chronos is a time tracking application.</p>
+        <p>Your time, clearly accounted for.</p>
       </header>
 
       <div className={styles.content}>

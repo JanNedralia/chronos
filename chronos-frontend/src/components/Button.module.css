@@ -1,39 +1,75 @@
+.addButton,
+.loadingButton,
+.neutralButton,
+.deleteButton {
+  display: inline-flex;
+  min-height: 2.4rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0.45rem 0.8rem;
+  border: 1px solid transparent;
+  border-radius: 0.65rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 150ms ease, border-color 150ms ease, transform 150ms ease;
+}
+
+.addButton,
+.loadingButton {
+  color: #07111f;
+  background: linear-gradient(135deg, #7bb8ff, #5593fa);
+}
+
 .addButton {
-    min-width: 2rem;
-    min-height: 2rem;
-    padding: 0.25rem 0.25rem;
-    background-color: green;
-    color: #fff;
-    border-radius: 5px;
-    cursor: pointer;
+  min-width: 2.4rem;
+  font-size: 1.2rem;
 }
 
 .loadingButton {
-    min-width: 6rem;
-    min-height: 2.5rem;
-    padding: 0.25rem 0.25rem;
-    background-color: green;
-    color: #fff;
-    border-radius: 5px;
-    cursor: pointer;
+  width: 100%;
+  min-height: 2.8rem;
 }
-  
+
+.addButton:hover,
+.loadingButton:not(:disabled):hover {
+  background: linear-gradient(135deg, #a0ceff, #72aaff);
+  transform: translateY(-1px);
+}
+
+.loadingButton:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
 .neutralButton {
-    min-width: 2rem;
-    min-height: 2rem;
-    padding: 0.25rem 0.25rem;
-    background-color: #0f0f0f;
-    color: #fff;
-    border-radius: 5px;
-    cursor: pointer;
+  min-width: 2.35rem;
+  border-color: var(--border);
+  color: #dce6f5;
+  background: #14243a;
+}
+
+.neutralButton:hover {
+  border-color: #426187;
+  background: #1b2e48;
 }
 
 .deleteButton {
-    min-width: 2rem;
-    min-height: 2rem;
-    padding: 0.25rem 0.25rem;
-    background-color: red;
-    color: #fff;
-    border-radius: 5px;
-    cursor: pointer;
+  min-width: 2.35rem;
+  border-color: rgba(240, 120, 130, 0.24);
+  color: #ffb4bb;
+  background: rgba(142, 47, 58, 0.22);
+}
+
+.deleteButton:hover {
+  border-color: rgba(240, 120, 130, 0.55);
+  background: rgba(142, 47, 58, 0.38);
+}
+
+.addButton:focus-visible,
+.loadingButton:focus-visible,
+.neutralButton:focus-visible,
+.deleteButton:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }

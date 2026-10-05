@@ -57,8 +57,7 @@ function TableWithDate({ id, projects }: Entry) {
  * @returns 
  */
 function AllEntryReport({ registeredEntries, onDelete }: { registeredEntries: Array<RegisteredEntry>, onDelete?: (entryId: string) => void }) {
-  // Sort the entries by date
-  registeredEntries.sort((a, b) => {
+  const sortedEntries = [...registeredEntries].sort((a, b) => {
     if (a.date < b.date) {
       return -1
     }
@@ -79,7 +78,7 @@ function AllEntryReport({ registeredEntries, onDelete }: { registeredEntries: Ar
         </tr>
       </thead>
       <tbody>
-        {registeredEntries.map((entry, index) => {
+        {sortedEntries.map((entry, index) => {
           return (
             <tr key={index}>
               <td>{entry.project}</td>
@@ -287,6 +286,15 @@ export function TimeReportView({ registeredEntries, onDelete, onSetNewDateRange 
   const [reportStyle, setReportStyle] = useState("raw")
   const [startDate, setStartDate] = useState(new Date())
   const [endDate, setEndDate] = useState(new Date())
+  const projectTotals = Array.from(
+    registeredEntries.reduce((totals, entry) => {
+      totals.set(entry.project, (totals.get(entry.project) || 0) + entry.hours)
+      return totals
+    }, new Map<string, number>()),
+    ([name, hours]) => ({ name, hours })
+  ).sort((a, b) => b.hours - a.hours || a.name.localeCompare(b.name))
+  const totalHours = registeredEntries.reduce((total, entry) => total + entry.hours, 0)
+  const maxProjectHours = projectTotals[0]?.hours || 0
 
   const handleReportStyleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setReportStyle(event.target.value)
@@ -314,33 +322,81 @@ export function TimeReportView({ registeredEntries, onDelete, onSetNewDateRange 
   return (
     <>
       <div className={styles.header}>
-        <h2>Time report</h2>
-        <div className={styles.dateRange}>
-          <div>
-            <label>From:</label>
-            <input
-              type="date"
-              value={turnDateIntoString(startDate)}
-              onChange={handleStartDateChange}
-            />
+        <div>
+          <h2>Time report</h2>
+          <p>See where your time is going.</p>
+        </div>
+        <div className={styles.reportControls}>
+          <div className={styles.dateRange}>
+            <label>
+              <span>From</span>
+              <input
+                type="date"
+                value={turnDateIntoString(startDate)}
+                onChange={handleStartDateChange}
+              />
+            </label>
+            <label>
+              <span>To</span>
+              <input
+                type="date"
+                value={turnDateIntoString(endDate)}
+                onChange={handleEndDateChange}
+              />
+            </label>
           </div>
+          <select aria-label="Report format" className={styles.select} value={reportStyle} onChange={handleReportStyleChange}>
+            <option value="raw">All entries</option>
+            <option value="daily">Day by day</option>
+            <option value="weekly">Weekly</option>
+            <option value="monthly">Monthly</option>
+          </select>
+        </div>
+      </div>
+
+      <div className={styles.summary}>
+        <div className={styles.statCard}>
+          <span>Total tracked</span>
+          <strong>{Number(totalHours.toFixed(2))}<small> hrs</small></strong>
+        </div>
+        <div className={styles.statCard}>
+          <span>Projects</span>
+          <strong>{projectTotals.length}</strong>
+        </div>
+        <div className={styles.statCard}>
+          <span>Time entries</span>
+          <strong>{registeredEntries.length}</strong>
+        </div>
+      </div>
+
+      <section className={styles.breakdown} aria-labelledby="project-breakdown-title">
+        <div className={styles.breakdownHeader}>
           <div>
-            <label>To:</label>
-            <input
-              type="date"
-              value={turnDateIntoString(endDate)}
-              onChange={handleEndDateChange}
-            />
+            <h3 id="project-breakdown-title">Project breakdown</h3>
+            <p>Hours tracked in this date range</p>
           </div>
         </div>
-        <select className={styles.select} value={reportStyle} onChange={handleReportStyleChange}>
-          <option value="raw">All entries</option>
-          <option value="daily">Day by day</option>
-          <option value="weekly">Weekly</option>
-          <option value="monthly">Monthly</option>
-        </select>
-      </div>
-      <p>Get a time report for a project</p>
+        {projectTotals.length === 0 ? (
+          <p className={styles.emptyState}>No time logged in this date range yet.</p>
+        ) : (
+          <div className={styles.chart} role="img" aria-label="Hours tracked for each project">
+            {projectTotals.map((project) => (
+              <div className={styles.chartRow} key={project.name}>
+                <div className={styles.chartLabel}>
+                  <span title={project.name}>{project.name}</span>
+                  <strong>{Number(project.hours.toFixed(2))} hrs</strong>
+                </div>
+                <div className={styles.barTrack} aria-hidden="true">
+                  <div
+                    className={styles.bar}
+                    style={{ width: `${(project.hours / maxProjectHours) * 100}%` }}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
 
       {reportStyle === "raw" && <AllEntryReport registeredEntries={registeredEntries} onDelete={onDelete} />}
       {reportStyle === "daily" && <DailyReport registeredEntries={registeredEntries} />}
