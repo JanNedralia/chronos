@@ -5,7 +5,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
-  padding: 0.6rem 0;
+  padding: 0.48rem 0.55rem;
   border-bottom: 1px solid var(--border);
 }
 
@@ -15,5 +15,21 @@
 
 .paragraph {
   overflow-wrap: anywhere;
-  color: #dce6f5;
+  color: #e0e7f1;
+  font-size: 0.86rem;
+}
+
+.rowItem button {
+  min-width: 1.15rem;
+  min-height: 1.15rem;
+  padding: 0;
+  border: 0;
+  border-radius: 0.2rem;
+  color: transparent;
+  background: #f52222;
+  font-size: 0;
+}
+
+.rowItem button:hover {
+  background: #ff5a5a;
 }
