@@ -39,7 +39,7 @@
 }
 
 .rangeHint {
-  color: #6f7d92;
+  color: var(--muted);
   font-style: normal;
   font-weight: 500;
 }
@@ -342,7 +342,7 @@
 
 .calendarEmptyMessage {
   margin-top: auto;
-  color: #6f7d92;
+  color: var(--muted);
   font-size: 0.7rem;
   font-style: italic;
 }

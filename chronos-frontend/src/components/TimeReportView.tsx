@@ -119,7 +119,9 @@ function DailyReport({ registeredEntries, startDate, endDate }: { registeredEntr
     return acc
   }, [] as Array<{ key: string, days: Array<string> }>)
 
-  const today = turnDateIntoString(new Date())
+  // Use the local calendar day so the highlighted day matches the user's own "today"
+  const now = new Date()
+  const today = turnDateIntoString(new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate())))
 
   if (months.length === 0) {
     return <p className={styles.emptyState}>Select a valid date range to see the calendar.</p>
