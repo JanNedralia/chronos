@@ -1,0 +1,103 @@
+.heading {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-bottom: 0.85rem;
+}
+
+.count {
+  min-width: 1.55rem;
+  padding: 0.05rem 0.4rem;
+  border-radius: 999px;
+  color: #d6d2ff;
+  background: #292a43;
+  font-size: 0.75rem;
+  text-align: center;
+}
+
+.search {
+  display: flex;
+  width: 100%;
+  min-height: 2.45rem;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 0.75rem;
+  border: 1px solid #2b3748;
+  border-radius: 0.45rem;
+  color: #aab6c7;
+  background: rgba(15, 24, 37, 0.62);
+}
+
+.search:focus-within {
+  border-color: var(--accent);
+}
+
+.search input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  color: var(--foreground);
+  background: transparent;
+  font-size: 0.85rem;
+}
+
+.search input::placeholder {
+  color: #909caf;
+}
+
+.search > span:last-child {
+  font-size: 1.3rem;
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  clip-path: inset(50%);
+}
+
+.list {
+  flex: 1;
+  min-height: 0;
+  margin-top: 0.55rem;
+  overflow-y: auto;
+}
+
+.empty {
+  padding: 0.75rem 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.addClient {
+  margin-top: 0.7rem;
+}
+
+.addClient summary {
+  display: flex;
+  min-height: 2.45rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.45rem 0.7rem;
+  border-radius: 0.45rem;
+  color: white;
+  background: linear-gradient(110deg, #5547ec, #4336d8);
+  font-size: 0.85rem;
+  font-weight: 600;
+  list-style: none;
+  cursor: pointer;
+}
+
+.addClient summary::-webkit-details-marker {
+  display: none;
+}
+
+.addClient summary span {
+  font-size: 1.2rem;
+  line-height: 1;
+}

@@ -66,21 +66,36 @@ function LoginView() {
   return (
     <div className={styles.background}>
       <form className={styles.container} onSubmit={handleSignIn}>
-        <h1 className={styles.title}>Sign In</h1>
-        <input
-          className={styles.field}
-          type="text"
-          placeholder="Email"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <input
-          className={styles.field}
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+        <Link href="/login" className={styles.brand}>
+          <span className={styles.brandMark} aria-hidden="true">◷</span>
+          <span>Chronos</span>
+        </Link>
+        <h1 className={styles.title}>Welcome back</h1>
+        <p className={styles.subtitle}>Sign in to continue tracking your time.</p>
+        <label className={styles.fieldGroup}>
+          Email
+          <input
+            className={styles.field}
+            type="email"
+            autoComplete="username"
+            required
+            placeholder="you@example.com"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+        </label>
+        <label className={styles.fieldGroup}>
+          Password
+          <input
+            className={styles.field}
+            type="password"
+            autoComplete="current-password"
+            required
+            placeholder="Enter your password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </label>
         <button disabled={loading} className={styles.signin}>{loading ? <Loader color='white' /> : 'Sign In'}</button>
         {error && <p className={styles.error}>{error}</p>}
         <Link href="/reset-password" className={styles.link}>

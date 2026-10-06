@@ -233,35 +233,75 @@ export default function MainView() {
   }, [refreshTimeEntries])
 
   return (
-    <main className={styles.main}>
-      <header className={styles.header}>
-        <div className={styles.row}>
-          <div className={styles.brand}>
-            <span className={styles.brandMark} aria-hidden="true">C</span>
-            <h1>Chronos</h1>
+    <div className={styles.appShell}>
+      <aside className={styles.sidebar}>
+        <a className={styles.brand} href="#clients">
+          <span className={styles.brandMark} aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="9" />
+              <path d="M12 7v5l3 2" />
+            </svg>
+          </span>
+          <span>
+            <strong>Chronos</strong>
+            <small>Time tracking made simple</small>
+          </span>
+        </a>
+
+        <nav className={styles.navigation} aria-label="Main navigation">
+          <a className={`${styles.navLink} ${styles.active}`} href="#clients">
+            <span aria-hidden="true">⌂</span> Clients
+          </a>
+          <p className={styles.navLabel}>Manage</p>
+          <a className={styles.navLink} href="#register-time">
+            <span aria-hidden="true">◷</span> Register time
+          </a>
+          <a className={styles.navLink} href="#report">
+            <span aria-hidden="true">▤</span> Time report
+          </a>
+        </nav>
+
+        <div className={styles.sidebarFooter}>
+          <div className={styles.account}>
+            <span className={styles.avatar} aria-hidden="true">JD</span>
+            <span><strong>My account</strong><small>Time tracker</small></span>
           </div>
-          <button className={styles.logout} onClick={logout}>Logout</button>
+          <button className={styles.logout} onClick={logout}>
+            <span aria-hidden="true">↪</span> Log out
+          </button>
         </div>
-        <p>Your time, clearly accounted for.</p>
-      </header>
+      </aside>
 
-      <div className={styles.content}>
-        <section className={styles.section}>
+      <main className={styles.workspace}>
+        <header className={styles.pageHeader}>
+          <div>
+            <h1>Clients</h1>
+            <p>View and manage your clients and time tracking.</p>
+          </div>
+          <div className={styles.profile} aria-label="Chronos workspace">
+            <span className={styles.avatar} aria-hidden="true">C</span>
+            <span>Workspace</span>
+          </div>
+        </header>
+
+        <div className={styles.content}>
+          <section id="clients" className={`${styles.section} ${styles.clientsSection}`}>
           <ClientListView addItem={addItem} deleteItem={deleteItem} items={items} loading={loading} />
-        </section>
+          </section>
 
-        <section className={styles.section}>
-          <RegisterTimeView items={items} onRegister={onRegisterTime} />
-        </section>
+          <section id="register-time" className={`${styles.section} ${styles.registerSection}`}>
+          <RegisterTimeView items={items} registeredEntries={registeredEntries} onRegister={onRegisterTime} />
+          </section>
 
-        <section className={styles.section}>
+          <section id="report" className={`${styles.section} ${styles.reportSection}`}>
           <TimeReportView
             registeredEntries={registeredEntries}
             onDelete={deleteEntry}
             onSetNewDateRange={handleChangeDateRange}
           />
-        </section>
-      </div>
-    </main>
+          </section>
+        </div>
+      </main>
+    </div>
   )
 }
