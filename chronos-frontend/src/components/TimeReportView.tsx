@@ -283,7 +283,7 @@ type TimeReportViewProps = {
 }
 
 export function TimeReportView({ registeredEntries, onDelete, onSetNewDateRange }: TimeReportViewProps) {
-  const [reportStyle, setReportStyle] = useState("raw")
+  const [reportStyle, setReportStyle] = useState("daily")
   const [startDate, setStartDate] = useState(new Date())
   const [endDate, setEndDate] = useState(new Date())
   const projectTotals = Array.from(

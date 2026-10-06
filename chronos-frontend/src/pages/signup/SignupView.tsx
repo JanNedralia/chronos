@@ -69,15 +69,23 @@ function SignupView() {
 
   const confirmView = (
     <div className={styles.container}>
+      <a href="/login" className={styles.brand}>
+        <span className={styles.brandMark} aria-hidden="true">◷</span>
+        <span>Chronos</span>
+      </a>
       <h1 className={styles.title}>Confirm Email</h1>
       <p className={styles.subtitle}>Please check your email for the confirmation code</p>
-      <input
-        className={styles.field}
-        type="text"
-        value={code}
-        onChange={(e) => setCode(e.target.value)}
-        placeholder="Code"
-      />
+      <label className={styles.fieldGroup}>
+        Confirmation code
+        <input
+          className={styles.field}
+          type="text"
+          autoComplete="one-time-code"
+          value={code}
+          onChange={(e) => setCode(e.target.value)}
+          placeholder="Enter your code"
+        />
+      </label>
       <button className={styles.button} onClick={handleConfirm}>Confirm</button>
       {error ? <p className={styles.error}>{error}</p> : null}
     </div>
@@ -85,28 +93,48 @@ function SignupView() {
 
   const signUpView = (
     <form className={styles.container} onSubmit={handleSignUp}>
+      <a href="/login" className={styles.brand}>
+        <span className={styles.brandMark} aria-hidden="true">◷</span>
+        <span>Chronos</span>
+      </a>
       <h1 className={styles.title}>Sign Up</h1>
-      <input
-        className={styles.field}
-        type="email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="Email"
-      />
-      <input
-        className={styles.field}
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="Password"
-      />
-      <input
-        className={styles.field}
-        type="password"
-        value={repeatPassword}
-        onChange={(e) => setRepeatPassword(e.target.value)}
-        placeholder="Repeat password"
-      />
+      <p className={styles.subtitle}>Create an account to start tracking your time.</p>
+      <label className={styles.fieldGroup}>
+        Email
+        <input
+          className={styles.field}
+          type="email"
+          autoComplete="email"
+          required
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="you@example.com"
+        />
+      </label>
+      <label className={styles.fieldGroup}>
+        Password
+        <input
+          className={styles.field}
+          type="password"
+          autoComplete="new-password"
+          required
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Create a password"
+        />
+      </label>
+      <label className={styles.fieldGroup}>
+        Repeat password
+        <input
+          className={styles.field}
+          type="password"
+          autoComplete="new-password"
+          required
+          value={repeatPassword}
+          onChange={(e) => setRepeatPassword(e.target.value)}
+          placeholder="Repeat your password"
+        />
+      </label>
       <button className={styles.button} type="submit" disabled={!valid}>Sign Up</button>
       {error ? <p className={styles.error}>{error}</p> : null}
       <Link className={styles.link} href="/login">Already have an account? Log in</Link>
