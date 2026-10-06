@@ -290,7 +290,7 @@ export default function MainView() {
           </section>
 
           <section id="register-time" className={`${styles.section} ${styles.registerSection}`}>
-          <RegisterTimeView items={items} onRegister={onRegisterTime} />
+          <RegisterTimeView items={items} registeredEntries={registeredEntries} onRegister={onRegisterTime} />
           </section>
 
           <section id="report" className={`${styles.section} ${styles.reportSection}`}>

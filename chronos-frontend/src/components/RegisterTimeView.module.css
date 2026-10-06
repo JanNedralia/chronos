@@ -1,61 +1,111 @@
+.titleRow {
+  display: flex;
+  min-height: 2.7rem;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.titleRow p {
+  margin-top: 0.2rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.addClientLink {
+  display: inline-flex;
+  min-height: 2.45rem;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  padding: 0.45rem 0.8rem;
+  border-radius: 0.4rem;
+  color: white;
+  background: linear-gradient(110deg, #5547ec, #4336d8);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.addClientLink:hover {
+  filter: brightness(1.12);
+}
+
 .registerForm {
   display: flex;
   width: 100%;
   flex-direction: column;
   align-items: flex-start;
-  gap: 1.1rem;
+  gap: 0.75rem;
+  margin-top: 0.9rem;
 }
 
 .registerForm > label {
   display: grid;
-  width: 100%;
-  gap: 0.45rem;
-  color: #dce6f5;
+  width: min(100%, 26rem);
+  gap: 0.4rem;
+  color: #e0e7f1;
   font-size: 0.85rem;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 .select,
 .field {
   width: 100%;
-  min-height: 2.75rem;
-  padding: 0.65rem 0.8rem;
-  border: 1px solid var(--border);
-  border-radius: 0.65rem;
+  min-height: 2.55rem;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid #2b3748;
+  border-radius: 0.42rem;
   color: var(--foreground);
-  background: #0b1728;
+  background: rgba(15, 24, 37, 0.72);
 }
 
 .select:focus,
 .field:focus {
-  border-color: var(--accent);
-  outline: 2px solid rgba(104, 168, 255, 0.18);
+  border-color: #7669ff;
+  outline: 2px solid rgba(118, 105, 255, 0.18);
   outline-offset: 1px;
 }
 
 .fieldLabel {
-  color: #dce6f5;
+  color: #e0e7f1;
   font-size: 0.85rem;
-  font-weight: 600;
+  font-weight: 500;
+}
+
+.datePanel {
+  display: grid;
+  width: 100%;
+  grid-template-columns: minmax(0, 1.25fr) minmax(12rem, 0.85fr);
+  align-items: stretch;
+  margin-top: 0.15rem;
+  padding: 0.65rem;
+  border: 1px solid #273449;
+  border-radius: 0.45rem;
+  background: rgba(16, 25, 39, 0.46);
 }
 
 .calendar {
-  width: 100%;
-  overflow: hidden;
-  padding: 0.4rem 0.65rem 0.25rem;
-  border: 1px solid var(--border);
-  border-radius: 0.85rem;
-  background: rgba(8, 17, 31, 0.42);
+  min-width: 0;
+}
+
+.calendar > .fieldLabel {
+  display: inline-block;
+  margin: 0.2rem 0 0.1rem 0.55rem;
 }
 
 .calendar :global(.MuiDateCalendar-root) {
   width: 100%;
-  max-height: 22rem;
-  margin: 0 auto;
+  max-height: 21rem;
+  margin: 0;
 }
 
 .calendar :global(.MuiPickersCalendarHeader-root) {
-  padding: 0 0.5rem;
+  padding: 0 0.25rem;
+}
+
+.calendar :global(.MuiPickersCalendarHeader-label) {
+  font-size: 0.95rem;
+  font-weight: 600;
 }
 
 .calendar :global(.MuiDayCalendar-header),
@@ -63,25 +113,106 @@
   justify-content: space-around;
 }
 
+.calendar :global(.MuiDayCalendar-weekDayLabel) {
+  color: #d8e0ec;
+  font-size: 0.7rem;
+}
+
+.calendar :global(.MuiPickersDay-root) {
+  width: 2.25rem;
+  height: 2.25rem;
+}
+
 .calendar :global(.MuiPickersDay-root.Mui-selected) {
-  color: #07111f;
-  background-color: #68a8ff;
+  color: white;
+  background-color: #5547ec;
 }
 
 .calendar :global(.MuiPickersDay-root.Mui-selected:hover) {
-  background-color: #91c0ff;
+  background-color: #7164ff;
 }
 
 .calendar :global(.MuiPickersDay-root:hover) {
-  background-color: #1b2e48;
+  background-color: #273449;
+}
+
+.weekSummary {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  padding: 0.65rem 0.4rem 0.55rem 1rem;
+  border-left: 1px solid #273449;
+}
+
+.weekSummary > strong {
+  margin-top: 0.3rem;
+  font-size: 1.45rem;
+}
+
+.totalLabel {
+  color: var(--muted);
+  font-size: 0.76rem;
+}
+
+.weekChart {
+  display: flex;
+  flex: 1;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.45rem;
+  min-height: 8rem;
+  margin-top: 0.65rem;
+}
+
+.weekDay {
+  display: flex;
+  min-width: 0;
+  height: 100%;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.45rem;
+}
+
+.weekBarTrack {
+  display: flex;
+  width: 100%;
+  height: 5.5rem;
+  align-items: flex-end;
+}
+
+.weekBar,
+.weekBarActive {
+  display: block;
+  width: min(1rem, 72%);
+  min-height: 0.3rem;
+  margin: 0 auto;
+  border-radius: 0.18rem 0.18rem 0 0;
+  background: #536174;
+}
+
+.weekBarActive {
+  background: linear-gradient(180deg, #8072ff, #5143e9);
+}
+
+.weekDayName,
+.weekDayHours {
+  color: #d5dce7;
+  font-size: 0.67rem;
+}
+
+.weekDayHours {
+  color: #aab6c7;
 }
 
 .inputRow {
   display: grid;
   width: 100%;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: minmax(7rem, 0.8fr) minmax(0, 2fr);
   align-items: center;
-  gap: 0.65rem;
+  gap: 0.55rem;
+  margin-top: 0.05rem;
 }
 
 .inputRow .fieldLabel {
@@ -95,25 +226,103 @@
 
 .quickButtons {
   display: flex;
+  min-width: 0;
   align-items: center;
-  gap: 0.4rem;
+  justify-content: space-between;
+  gap: 0.3rem;
+}
+
+.quickButtons button {
+  min-width: 2rem;
+  min-height: 2.45rem;
+  padding: 0.35rem 0.45rem;
+  font-size: 0.75rem;
 }
 
 .submit {
   width: 100%;
-  margin-top: 0.1rem;
 }
 
-@media screen and (max-width: 480px) {
+.submit button {
+  min-height: 2.6rem;
+  color: white;
+  background: linear-gradient(110deg, #119d4b, #07833d);
+}
+
+.submit button:hover {
+  background: linear-gradient(110deg, #18b65a, #0b9948);
+}
+
+@media (max-width: 1150px) {
+  .datePanel {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .weekSummary {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    padding: 0.8rem 0.25rem 0.25rem;
+    border-top: 1px solid #273449;
+    border-left: 0;
+  }
+
+  .weekSummary > strong {
+    grid-column: 2;
+    grid-row: 1 / 3;
+  }
+
+  .weekChart {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 760px) {
+  .datePanel {
+    grid-template-columns: minmax(0, 1.2fr) minmax(10rem, 0.8fr);
+  }
+
+  .weekSummary {
+    display: flex;
+    padding: 0.65rem 0.35rem 0.45rem 0.8rem;
+    border-top: 0;
+    border-left: 1px solid #273449;
+  }
+}
+
+@media (max-width: 520px) {
+  .titleRow {
+    flex-wrap: wrap;
+  }
+
+  .datePanel {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .weekSummary {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    padding: 0.8rem 0.25rem 0.25rem;
+    border-top: 1px solid #273449;
+    border-left: 0;
+  }
+
+  .weekSummary > strong {
+    grid-column: 2;
+    grid-row: 1 / 3;
+  }
+
+  .weekChart {
+    grid-column: 1 / -1;
+    min-height: 6.5rem;
+  }
+
   .inputRow {
     grid-template-columns: 1fr;
   }
 
   .inputRow .fieldLabel {
     grid-column: auto;
-  }
-
-  .quickButtons {
-    justify-content: space-between;
   }
 }
