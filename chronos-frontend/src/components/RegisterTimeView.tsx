@@ -138,7 +138,7 @@ function RegisterTimeView({
                 <div className={styles.weekDay} key={index}>
                   <div className={styles.weekBarTrack}>
                     <span
-                      className={index === 1 ? styles.weekBarActive : styles.weekBar}
+                      className={hours > 0 ? styles.weekBarActive : styles.weekBar}
                       style={{ height: `${Math.max(10, (hours / maxDayHours) * 100)}%` }}
                     />
                   </div>

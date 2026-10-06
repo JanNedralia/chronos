@@ -33,9 +33,11 @@ export function RowItem(props: RowItemProps) {
         <div className={styles.rowItem}>
             <p className={styles.paragraph}>{props.item.name}</p>
             {props.item.isUpdating && <BarLoader color={"white"} />}
-            {confirmDelete && <DeleteButton text="Confirm delete" action={handleDelete} />}
-            {confirmDelete && <NeutralButton text="x" action={cancelDelete} />}
-            {!confirmDelete && <DeleteButton action={handleButtonAction} />}
+            <div className={confirmDelete ? styles.confirmActions : styles.actions}>
+                {confirmDelete && <DeleteButton text="Confirm delete" action={handleDelete} />}
+                {confirmDelete && <NeutralButton text="Cancel" action={cancelDelete} />}
+                {!confirmDelete && <DeleteButton action={handleButtonAction} />}
+            </div>
         </div>
     )
 }

@@ -19,7 +19,7 @@
   font-size: 0.86rem;
 }
 
-.rowItem button {
+.actions button {
   min-width: 1.15rem;
   min-height: 1.15rem;
   padding: 0;
@@ -30,6 +30,30 @@
   font-size: 0;
 }
 
-.rowItem button:hover {
+.actions button:hover {
   background: #ff5a5a;
+}
+
+.actions {
+  display: flex;
+  flex: none;
+}
+
+.confirmActions {
+  display: flex;
+  flex: none;
+  gap: 0.35rem;
+}
+
+.confirmActions button {
+  min-width: auto;
+  min-height: 2rem;
+  padding: 0.3rem 0.55rem;
+  font-size: 0.72rem;
+}
+
+.confirmActions button:last-child {
+  border: 1px solid var(--border);
+  color: #dce6f5;
+  background: #14243a;
 }

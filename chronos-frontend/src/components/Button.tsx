@@ -58,7 +58,7 @@ export function DeleteButton(props: ButtonProps) {
 
     return (
         <>
-            <button className={styles.deleteButton} onClick={onClick}>
+            <button aria-label={props.text || "Delete"} className={styles.deleteButton} onClick={onClick}>
                 {props.text || "-"}
             </button>
         </>

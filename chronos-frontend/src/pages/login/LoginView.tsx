@@ -66,10 +66,10 @@ function LoginView() {
   return (
     <div className={styles.background}>
       <form className={styles.container} onSubmit={handleSignIn}>
-        <a href="/login" className={styles.brand}>
+        <Link href="/login" className={styles.brand}>
           <span className={styles.brandMark} aria-hidden="true">◷</span>
           <span>Chronos</span>
-        </a>
+        </Link>
         <h1 className={styles.title}>Welcome back</h1>
         <p className={styles.subtitle}>Sign in to continue tracking your time.</p>
         <label className={styles.fieldGroup}>

@@ -69,10 +69,10 @@ function SignupView() {
 
   const confirmView = (
     <div className={styles.container}>
-      <a href="/login" className={styles.brand}>
+      <Link href="/login" className={styles.brand}>
         <span className={styles.brandMark} aria-hidden="true">◷</span>
         <span>Chronos</span>
-      </a>
+      </Link>
       <h1 className={styles.title}>Confirm Email</h1>
       <p className={styles.subtitle}>Please check your email for the confirmation code</p>
       <label className={styles.fieldGroup}>
@@ -93,10 +93,10 @@ function SignupView() {
 
   const signUpView = (
     <form className={styles.container} onSubmit={handleSignUp}>
-      <a href="/login" className={styles.brand}>
+      <Link href="/login" className={styles.brand}>
         <span className={styles.brandMark} aria-hidden="true">◷</span>
         <span>Chronos</span>
-      </a>
+      </Link>
       <h1 className={styles.title}>Sign Up</h1>
       <p className={styles.subtitle}>Create an account to start tracking your time.</p>
       <label className={styles.fieldGroup}>
