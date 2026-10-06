@@ -1,12 +1,13 @@
 'use client'
 
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useEffect, useRef, useState } from "react"
 import { ItemData } from "@/components/RowItem"
 import { TimeReportView } from "@/components/TimeReportView"
 import { RegisteredEntry } from "@/common-types"
 import ClientListView from "@/components/ClientListView"
 import RegisterTimeView from "@/components/RegisterTimeView"
 import API, { ErrorCode, ErrorResponse, DailyReportEntry } from "@/api"
+import { getEndOfMonth, getStartOfMonth, turnDateIntoString } from "@/utils/dates"
 
 import styles from "../app/page.module.css"
 
@@ -38,8 +39,9 @@ export default function MainView() {
   const [items, setItems] = useState<Array<ItemData>>([])
   const [registeredEntries, setRegisteredEntries] = useState<Array<RegisteredEntry>>([])
   const [loading, setLoading] = useState(true)
-  const [startDate, setStartDate] = useState('')
-  const [endDate, setEndDate] = useState('')
+  const [startDate, setStartDate] = useState(() => turnDateIntoString(getStartOfMonth(new Date())))
+  const [endDate, setEndDate] = useState(() => turnDateIntoString(getEndOfMonth(new Date())))
+  const latestEntriesRequest = useRef(0)
 
   /**
    * Logout the user by removing the access token and user ID from local storage
@@ -110,7 +112,15 @@ export default function MainView() {
    * @returns void
    * */
   const refreshTimeEntries = useCallback(async () => {
+    // Only apply the response of the latest request so that a slow response for an
+    // older date range never overwrites the data for the currently selected range
+    const requestId = ++latestEntriesRequest.current
     const allEntries = await getEntries(undefined)
+
+    if (requestId !== latestEntriesRequest.current) {
+      return
+    }
+
     setRegisteredEntries(allEntries.flat())
   }, [getEntries, setRegisteredEntries])
 
@@ -296,6 +306,8 @@ export default function MainView() {
           <section id="report" className={`${styles.section} ${styles.reportSection}`}>
           <TimeReportView
             registeredEntries={registeredEntries}
+            startDate={startDate}
+            endDate={endDate}
             onDelete={deleteEntry}
             onSetNewDateRange={handleChangeDateRange}
           />

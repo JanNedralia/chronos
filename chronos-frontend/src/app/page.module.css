@@ -220,7 +220,10 @@
 }
 
 .reportSection {
+  display: flex;
   grid-column: 1 / -1;
+  flex-direction: column;
+  gap: 1.25rem;
   scroll-margin-top: 1rem;
 }
 

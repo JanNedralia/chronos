@@ -149,9 +149,54 @@
   font-size: 1.45rem;
 }
 
+.weekHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.weekToggle {
+  display: inline-flex;
+  flex: none;
+  padding: 0.15rem;
+  border: 1px solid #2b3748;
+  border-radius: 999px;
+  background: rgba(15, 24, 37, 0.72);
+}
+
+.weekToggle button {
+  padding: 0.15rem 0.6rem;
+  border: 0;
+  border-radius: 999px;
+  color: #aab6c7;
+  background: transparent;
+  font-size: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 150ms ease, background 150ms ease;
+}
+
+.weekToggle button:hover {
+  color: #e0e7f1;
+}
+
+.weekToggle button.weekToggleActive {
+  color: white;
+  background: #5547ec;
+}
+
+.weekToggle button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
 .totalLabel {
+  overflow: hidden;
   color: var(--muted);
   font-size: 0.76rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .weekChart {
@@ -227,16 +272,17 @@
 .quickButtons {
   display: flex;
   min-width: 0;
+  flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
-  gap: 0.3rem;
+  justify-content: flex-start;
+  gap: 0.5rem;
 }
 
 .quickButtons button {
-  min-width: 2rem;
+  min-width: 2.75rem;
   min-height: 2.45rem;
-  padding: 0.35rem 0.45rem;
-  font-size: 0.75rem;
+  padding: 0.35rem 0.6rem;
+  font-size: 0.78rem;
 }
 
 .submit {
@@ -249,8 +295,9 @@
   background: linear-gradient(110deg, #119d4b, #07833d);
 }
 
-.submit button:hover {
-  background: linear-gradient(110deg, #18b65a, #0b9948);
+.submit button:not(:disabled):hover {
+  background: linear-gradient(110deg, #16ad55, #0a9345);
+  box-shadow: 0 6px 16px rgba(17, 157, 75, 0.25);
 }
 
 @media (max-width: 1150px) {

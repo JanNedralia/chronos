@@ -38,6 +38,7 @@ function RegisterTimeView({
   const [project, setProject] = useState('')
   const [date, setDate] = useState(new Date())
   const [loading, setLoading] = useState(false)
+  const [weekScope, setWeekScope] = useState<'project' | 'all'>('project')
 
   async function onSubmit (event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -96,7 +97,7 @@ function RegisterTimeView({
     const day = new Date(weekStart)
     day.setDate(day.getDate() + dayIndex)
     return registeredEntries
-      .filter((entry) => entry.date.toDateString() === day.toDateString() && (!project || entry.project === project))
+      .filter((entry) => entry.date.toDateString() === day.toDateString() && (weekScope === 'all' || !project || entry.project === project))
       .reduce((total, entry) => total + entry.hours, 0)
   })
   const totalWeekHours = weekHours.reduce((total, hours) => total + hours, 0)
@@ -130,9 +131,32 @@ function RegisterTimeView({
             </LocalizationProvider>
           </div>
           <div className={styles.weekSummary}>
-            <span className={styles.fieldLabel}>This week</span>
+            <div className={styles.weekHeader}>
+              <span className={styles.fieldLabel}>This week</span>
+              <div className={styles.weekToggle} role="group" aria-label="Show hours for">
+                <button
+                  type="button"
+                  aria-pressed={weekScope === 'project'}
+                  className={weekScope === 'project' ? styles.weekToggleActive : undefined}
+                  onClick={() => setWeekScope('project')}
+                  title={project ? `Only ${project}` : 'Selected project'}
+                >
+                  Project
+                </button>
+                <button
+                  type="button"
+                  aria-pressed={weekScope === 'all'}
+                  className={weekScope === 'all' ? styles.weekToggleActive : undefined}
+                  onClick={() => setWeekScope('all')}
+                >
+                  All
+                </button>
+              </div>
+            </div>
             <strong>{Number(totalWeekHours.toFixed(2))}h</strong>
-            <span className={styles.totalLabel}>Total time</span>
+            <span className={styles.totalLabel}>
+              {weekScope === 'all' || !project ? 'Total time, all projects' : `Total time, ${project}`}
+            </span>
             <div className={styles.weekChart} aria-label="Hours tracked each day this week">
               {weekHours.map((hours, index) => (
                 <div className={styles.weekDay} key={index}>

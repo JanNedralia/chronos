@@ -51,6 +51,17 @@ export function NeutralButton(props: ButtonProps) {
     )
 }
 
+function TrashIcon() {
+    return (
+        <svg className={styles.icon} viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M4 7h16" />
+            <path d="M10 11v6M14 11v6" />
+            <path d="M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12" />
+            <path d="M9 7V4h6v3" />
+        </svg>
+    )
+}
+
 export function DeleteButton(props: ButtonProps) {
     const onClick = (event: React.MouseEvent<HTMLButtonElement>) => {
         props.action(event)
@@ -58,8 +69,8 @@ export function DeleteButton(props: ButtonProps) {
 
     return (
         <>
-            <button aria-label={props.text || "Delete"} className={styles.deleteButton} onClick={onClick}>
-                {props.text || "-"}
+            <button aria-label={props.text || "Delete"} title={props.text || "Delete"} className={styles.deleteButton} onClick={onClick}>
+                {props.text || <TrashIcon />}
             </button>
         </>
     )
