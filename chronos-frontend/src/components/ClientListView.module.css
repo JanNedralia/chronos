@@ -61,10 +61,14 @@
 }
 
 .list {
-  flex: 1;
-  min-height: 0;
+  height: 24rem;
+  flex: none;
   margin-top: 0.55rem;
+  padding-right: 0.25rem;
   overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-color: #33415a transparent;
+  scrollbar-width: thin;
 }
 
 .empty {
@@ -74,7 +78,8 @@
 }
 
 .addClient {
-  margin-top: 0.7rem;
+  margin-top: auto;
+  padding-top: 0.7rem;
 }
 
 .addClient summary {
@@ -100,4 +105,10 @@
 .addClient summary span {
   font-size: 1.2rem;
   line-height: 1;
+}
+
+@media (max-width: 760px) {
+  .list {
+    height: 18rem;
+  }
 }

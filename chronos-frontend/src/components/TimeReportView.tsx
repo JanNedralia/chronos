@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { RegisteredEntry } from "@/common-types"
 import { DeleteButton } from "@/components/Button"
-import { getEndOfMonth, getStartOfMonth, turnDateIntoString } from "@/utils/dates"
+import { MAX_RANGE_MONTHS, clampDateRange, getDaysInRange, parseDateString, turnDateIntoString } from "@/utils/dates"
 
 import styles from "./TimeReport.module.css"
 
@@ -95,60 +95,94 @@ function AllEntryReport({ registeredEntries, onDelete }: { registeredEntries: Ar
   )
 }
 
-function DailyReport({ registeredEntries }: { registeredEntries: Array<RegisteredEntry> }) {
+const WEEKDAY_NAMES = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+
+function DailyReport({ registeredEntries, startDate, endDate }: { registeredEntries: Array<RegisteredEntry>, startDate: string, endDate: string }) {
   // Bundle all the entries for the same day and project
-  const dailyEntries = registeredEntries.reduce((acc, entry) => {
-    const key = `${entry.date.toDateString()}-${entry.project}`
-    if (!acc[key]) {
-      acc[key] = { date: entry.date, project: entry.project, hours: 0 }
-    }
-    acc[key].hours += entry.hours
+  const projectsByDay = registeredEntries.reduce((acc, entry) => {
+    const day = turnDateIntoString(entry.date)
+    const projects = acc.get(day) || new Map<string, number>()
+    projects.set(entry.project, (projects.get(entry.project) || 0) + entry.hours)
+    acc.set(day, projects)
     return acc
-  }
-  , {} as { [key: string]: { date: Date, project: string, hours: number } })
+  }, new Map<string, Map<string, number>>())
 
-  // Convert the object back to an array
-  const dailyEntryArray = Object.values(dailyEntries)
-
-  // Transform to a daily table list
-  var dailyTableList: TableList = { entry: [] }
-
-  // Sort according to date
-  dailyEntryArray.sort((a, b) => {
-    if (a.date < b.date) {
-      return -1
-    }
-    if (a.date > b.date) {
-      return 1
-    }
-    return 0
-  })
-
-  dailyEntryArray.forEach((entry) => {
-    const date = entry.date.toDateString()
-    const project = entry.project
-    const hours = entry.hours
-
-    const existingEntry = dailyTableList.entry.find((entry) => entry.id === date)
-    if (existingEntry) {
-      const existingProject = existingEntry.projects.find((p) => p.name === project)
-      if (existingProject) {
-        existingProject.hours += hours
-      } else {
-        existingEntry.projects.push({ name: project, hours: hours })
-      }
+  // Group every day in the selected period by month so it can be shown as a calendar
+  const months = getDaysInRange(startDate, endDate).reduce((acc, day) => {
+    const monthKey = day.slice(0, 7)
+    const lastMonth = acc[acc.length - 1]
+    if (lastMonth && lastMonth.key === monthKey) {
+      lastMonth.days.push(day)
     } else {
-      dailyTableList.entry.push({
-        id: entry.date.toDateString(),
-        projects: [{ name: project, hours: hours }]
-      })
+      acc.push({ key: monthKey, days: [day] })
     }
-  })
+    return acc
+  }, [] as Array<{ key: string, days: Array<string> }>)
+
+  // Use the local calendar day so the highlighted day matches the user's own "today"
+  const now = new Date()
+  const today = turnDateIntoString(new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate())))
+
+  if (months.length === 0) {
+    return <p className={styles.emptyState}>Select a valid date range to see the calendar.</p>
+  }
 
   return (
-    <div className={styles.tableList}>
-      {dailyTableList.entry.map((entry, index) => {
-        return <TableWithDate key={index} id={entry.id} projects={entry.projects} />
+    <div className={styles.calendarList}>
+      {months.map((month) => {
+        const firstDay = parseDateString(month.days[0]) as Date
+        const leadingBlanks = (firstDay.getUTCDay() + 6) % 7
+        const monthTitle = firstDay.toLocaleDateString(undefined, { month: "long", year: "numeric", timeZone: "UTC" })
+
+        return (
+          <section className={styles.calendarMonth} key={month.key} aria-label={monthTitle}>
+            <h3>{monthTitle}</h3>
+            <div className={styles.calendarGrid}>
+              {WEEKDAY_NAMES.map((name) => (
+                <span className={styles.calendarWeekday} key={name} aria-hidden="true">{name}</span>
+              ))}
+              {Array.from({ length: leadingBlanks }, (_, index) => (
+                <span className={styles.calendarBlank} key={`blank-${index}`} aria-hidden="true" />
+              ))}
+              {month.days.map((day) => {
+                const date = parseDateString(day) as Date
+                const projects = Array.from(projectsByDay.get(day) || [])
+                const dayTotal = projects.reduce((total, [, hours]) => total + hours, 0)
+                const isWeekend = date.getUTCDay() === 0 || date.getUTCDay() === 6
+                const classNames = [
+                  styles.calendarDay,
+                  projects.length === 0 ? styles.calendarDayEmpty : '',
+                  isWeekend ? styles.calendarDayWeekend : '',
+                  day === today ? styles.calendarDayToday : '',
+                ].filter(Boolean).join(' ')
+
+                return (
+                  <article className={classNames} key={day}>
+                    <header>
+                      <span className={styles.calendarDayNumber}>{date.getUTCDate()}</span>
+                      <span className={styles.calendarDayName}>
+                        {date.toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric", timeZone: "UTC" })}
+                      </span>
+                      {dayTotal > 0 && <strong>{Number(dayTotal.toFixed(2))}h</strong>}
+                    </header>
+                    {projects.length === 0 ? (
+                      <p className={styles.calendarEmptyMessage}>No time logged</p>
+                    ) : (
+                      <ul>
+                        {projects.map(([name, hours]) => (
+                          <li key={name}>
+                            <span title={name}>{name}</span>
+                            <span>{Number(hours.toFixed(2))}h</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </article>
+                )
+              })}
+            </div>
+          </section>
+        )
       })}
     </div>
   )
@@ -278,14 +312,14 @@ function MonthlyReport({ registeredEntries }: { registeredEntries: Array<Registe
 
 type TimeReportViewProps = {
   registeredEntries: Array<RegisteredEntry>,
+  startDate: string,
+  endDate: string,
   onDelete?: (entryId: string) => void
   onSetNewDateRange?: (from: string, to: string) => void
 }
 
-export function TimeReportView({ registeredEntries, onDelete, onSetNewDateRange }: TimeReportViewProps) {
+export function TimeReportView({ registeredEntries, startDate, endDate, onDelete, onSetNewDateRange }: TimeReportViewProps) {
   const [reportStyle, setReportStyle] = useState("daily")
-  const [startDate, setStartDate] = useState(new Date())
-  const [endDate, setEndDate] = useState(new Date())
   const projectTotals = Array.from(
     registeredEntries.reduce((totals, entry) => {
       totals.set(entry.project, (totals.get(entry.project) || 0) + entry.hours)
@@ -300,23 +334,22 @@ export function TimeReportView({ registeredEntries, onDelete, onSetNewDateRange 
     setReportStyle(event.target.value)
   }
 
-  useEffect(() => {
-    const today = new Date()
-    const startOfMonth = getStartOfMonth(today)
-    const endOfMonth = getEndOfMonth(today)
-    setStartDate(startOfMonth)
-    setEndDate(endOfMonth)
-    onSetNewDateRange?.(turnDateIntoString(startOfMonth), turnDateIntoString(endOfMonth))
-  }, [onSetNewDateRange])
-
   const handleStartDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setStartDate(new Date(event.target.value))
-    onSetNewDateRange?.(event.target.value, turnDateIntoString(endDate))
+    if (!parseDateString(event.target.value)) {
+      return
+    }
+
+    const range = clampDateRange(event.target.value, endDate, 'from')
+    onSetNewDateRange?.(range.from, range.to)
   }
 
   const handleEndDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEndDate(new Date(event.target.value))
-    onSetNewDateRange?.(turnDateIntoString(startDate), event.target.value)
+    if (!parseDateString(event.target.value)) {
+      return
+    }
+
+    const range = clampDateRange(startDate, event.target.value, 'to')
+    onSetNewDateRange?.(range.from, range.to)
   }
 
   return (
@@ -332,15 +365,15 @@ export function TimeReportView({ registeredEntries, onDelete, onSetNewDateRange 
               <span>From</span>
               <input
                 type="date"
-                value={turnDateIntoString(startDate)}
+                value={startDate}
                 onChange={handleStartDateChange}
               />
             </label>
             <label>
-              <span>To</span>
+              <span>To <em className={styles.rangeHint}>(max {MAX_RANGE_MONTHS} months)</em></span>
               <input
                 type="date"
-                value={turnDateIntoString(endDate)}
+                value={endDate}
                 onChange={handleEndDateChange}
               />
             </label>
@@ -399,7 +432,7 @@ export function TimeReportView({ registeredEntries, onDelete, onSetNewDateRange 
       </section>
 
       {reportStyle === "raw" && <AllEntryReport registeredEntries={registeredEntries} onDelete={onDelete} />}
-      {reportStyle === "daily" && <DailyReport registeredEntries={registeredEntries} />}
+      {reportStyle === "daily" && <DailyReport registeredEntries={registeredEntries} startDate={startDate} endDate={endDate} />}
       {reportStyle === "weekly" && <WeeklyReport registeredEntries={registeredEntries} />}
       {reportStyle === "monthly" && <MonthlyReport registeredEntries={registeredEntries} />}
     </>

@@ -20,18 +20,15 @@
 }
 
 .actions button {
-  min-width: 1.15rem;
-  min-height: 1.15rem;
+  min-width: 1.9rem;
+  min-height: 1.9rem;
   padding: 0;
-  border: 0;
-  border-radius: 0.2rem;
-  color: transparent;
-  background: #f52222;
-  font-size: 0;
+  border-radius: 0.4rem;
 }
 
-.actions button:hover {
-  background: #ff5a5a;
+.actions button svg {
+  width: 0.95rem;
+  height: 0.95rem;
 }
 
 .actions {

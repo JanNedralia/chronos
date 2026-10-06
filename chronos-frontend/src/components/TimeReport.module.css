@@ -38,6 +38,12 @@
   font-weight: 600;
 }
 
+.rangeHint {
+  color: var(--muted);
+  font-style: normal;
+  font-weight: 500;
+}
+
 .dateRange input,
 .select {
   min-height: 2.45rem;
@@ -172,15 +178,15 @@
 }
 
 .tableList {
-  display: flex;
+  display: grid;
   width: 100%;
-  flex-wrap: wrap;
-  gap: 0.7rem;
+  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+  align-items: start;
+  gap: 1rem;
 }
 
 .projectsTable {
-  width: calc(25% - 0.525rem);
-  margin-top: 0.1rem;
+  min-width: 0;
   padding: 0.8rem 0.9rem 0.45rem;
   border: 1px solid #29364a;
   border-radius: 0.45rem;
@@ -227,9 +233,155 @@
   min-height: 1.9rem;
 }
 
+.calendarList {
+  display: grid;
+  width: 100%;
+  gap: 1.5rem;
+}
+
+.calendarMonth h3 {
+  margin-bottom: 0.65rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.calendarGrid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.calendarWeekday {
+  padding: 0 0.2rem;
+  color: var(--muted);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.calendarDay {
+  display: flex;
+  min-width: 0;
+  min-height: 6rem;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.5rem 0.55rem;
+  border: 1px solid #29364a;
+  border-radius: 0.45rem;
+  background: rgba(13, 22, 35, 0.52);
+}
+
+.calendarDayWeekend {
+  background: rgba(13, 22, 35, 0.3);
+}
+
+.calendarDayEmpty {
+  border-style: dashed;
+  border-color: #233044;
+}
+
+.calendarDayToday {
+  border-color: #7669ff;
+  box-shadow: inset 0 0 0 1px rgba(118, 105, 255, 0.35);
+}
+
+.calendarDay header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.4rem;
+}
+
+.calendarDayNumber {
+  color: #e0e7f1;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.calendarDayName {
+  display: none;
+  color: #e0e7f1;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.calendarDay header strong {
+  padding: 0.05rem 0.4rem;
+  border-radius: 999px;
+  color: #d6d2ff;
+  background: #292a43;
+  font-size: 0.7rem;
+}
+
+.calendarDay ul {
+  display: grid;
+  gap: 0.2rem;
+  list-style: none;
+}
+
+.calendarDay li {
+  display: flex;
+  min-width: 0;
+  justify-content: space-between;
+  gap: 0.35rem;
+  color: #c2c9d7;
+  font-size: 0.72rem;
+}
+
+.calendarDay li span:first-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.calendarDay li span:last-child {
+  flex: none;
+  color: #e0e7f1;
+}
+
+.calendarEmptyMessage {
+  margin-top: auto;
+  color: var(--muted);
+  font-size: 0.7rem;
+  font-style: italic;
+}
+
 @media (max-width: 1100px) {
-  .projectsTable {
-    width: calc(50% - 0.35rem);
+  .calendarGrid {
+    gap: 0.35rem;
+  }
+
+  .calendarDay {
+    min-height: 5rem;
+    padding: 0.4rem;
+  }
+}
+
+@media (max-width: 900px) {
+  .calendarGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .calendarWeekday,
+  .calendarBlank {
+    display: none;
+  }
+
+  .calendarDay {
+    min-height: 0;
+  }
+
+  .calendarDayNumber {
+    display: none;
+  }
+
+  .calendarDayName {
+    display: inline;
+  }
+
+  .calendarEmptyMessage {
+    margin-top: 0;
   }
 }
 
@@ -282,9 +434,5 @@
   .dateRange {
     width: 100%;
     flex-basis: 100%;
-  }
-
-  .projectsTable {
-    width: 100%;
   }
 }
