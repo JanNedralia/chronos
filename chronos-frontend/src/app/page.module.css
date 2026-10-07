@@ -185,12 +185,9 @@
   font-size: 0.9rem;
 }
 
-.profile {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  color: #c8d2e1;
-  font-size: 0.85rem;
+.mobileTabs,
+.mobileTitle {
+  display: none;
 }
 
 .content {
@@ -263,6 +260,10 @@
     padding: 0.65rem 1rem;
     border-right: 0;
     border-bottom: 1px solid #202c3e;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
   }
 
   .brand {
@@ -272,25 +273,56 @@
   }
 
   .brand small,
-  .sidebarFooter,
-  .navLabel {
+  .account,
+  .navigation,
+  .desktopTitle {
     display: none;
   }
 
-  .navigation {
-    display: flex;
+  .sidebarFooter {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+  }
+
+  .logout {
+    min-height: 2.75rem;
+    padding: 0.55rem 0.6rem;
+    border: 0;
+  }
+
+  .mobileTabs {
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 0.4rem;
     padding-top: 0.5rem;
   }
 
-  .navLink {
-    min-height: 2.4rem;
-    padding: 0.4rem 0.6rem;
+  .mobileTabs .navLink {
+    min-height: 2.75rem;
+    justify-content: center;
+    padding: 0.4rem;
+    border: 0;
+    background: none;
     font-size: 0.82rem;
+    text-align: center;
+    cursor: pointer;
   }
 
-  .navLink > span {
-    display: none;
+  .mobileTabs .navLink:hover,
+  .mobileTabs .navLink.active {
+    background: linear-gradient(110deg, rgba(100, 91, 220, 0.16), rgba(100, 91, 220, 0.06));
+  }
+
+  .mobileTabs .navLink:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .mobileTitle {
+    display: inline;
   }
 
   .workspace {
@@ -315,13 +347,13 @@
   .registerSection {
     min-height: auto;
   }
+
+  .mobileHidden {
+    display: none;
+  }
 }
 
 @media (max-width: 480px) {
-  .profile > span:last-child {
-    display: none;
-  }
-
   .section {
     padding: 1rem;
   }

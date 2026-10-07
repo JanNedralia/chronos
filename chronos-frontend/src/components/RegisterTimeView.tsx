@@ -27,12 +27,14 @@ type RegisterTimeViewProps = {
   items: Array<ItemData>
   registeredEntries: Array<RegisteredEntry>
   onRegister: (hours: number, date: Date, project: string) => Promise<void>
+  onShowClients?: () => void
 }
 
 function RegisterTimeView({
   items,
   registeredEntries,
   onRegister,
+  onShowClients,
 }: RegisterTimeViewProps) {
   const [hours, setHours] = useState(0)
   const [project, setProject] = useState('')
@@ -110,7 +112,7 @@ function RegisterTimeView({
           <h2>Register time</h2>
           <p>Log hours to keep your projects on track.</p>
         </div>
-        <a className={styles.addClientLink} href="#clients">＋ Add new client</a>
+        <a className={styles.addClientLink} href="#clients" onClick={onShowClients}>＋ Add new client</a>
       </div>
 
       <form className={styles.registerForm} onSubmit={onSubmit}>
