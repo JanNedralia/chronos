@@ -11,6 +11,12 @@ import { getEndOfMonth, getStartOfMonth, turnDateIntoString } from "@/utils/date
 
 import styles from "../app/page.module.css"
 
+const views = [
+  { id: 'clients', label: 'Clients' },
+  { id: 'register-time', label: 'Register time' },
+  { id: 'report', label: 'Time report' },
+] as const
+
 /**
  * MainView component is the main entry point for the Chronos time tracking application.
  * It manages the state and interactions for clients and time entries.
@@ -36,6 +42,7 @@ import styles from "../app/page.module.css"
  * @name MainView
  */
 export default function MainView() {
+  const [activeView, setActiveView] = useState<typeof views[number]['id']>('clients')
   const [items, setItems] = useState<Array<ItemData>>([])
   const [registeredEntries, setRegisteredEntries] = useState<Array<RegisteredEntry>>([])
   const [loading, setLoading] = useState(true)
@@ -245,7 +252,7 @@ export default function MainView() {
   return (
     <div className={styles.appShell}>
       <aside className={styles.sidebar}>
-        <a className={styles.brand} href="#clients">
+        <a className={styles.brand} href="#clients" onClick={() => setActiveView('clients')}>
           <span className={styles.brandMark} aria-hidden="true">
             <svg viewBox="0 0 24 24" fill="none">
               <circle cx="12" cy="12" r="9" />
@@ -280,30 +287,44 @@ export default function MainView() {
             <span aria-hidden="true">↪</span> Log out
           </button>
         </div>
+
+        <nav className={styles.mobileTabs} aria-label="Choose view">
+          {views.map((view) => (
+            <button
+              key={view.id}
+              type="button"
+              className={`${styles.navLink} ${activeView === view.id ? styles.active : ''}`}
+              aria-pressed={activeView === view.id}
+              aria-controls={view.id}
+              onClick={() => setActiveView(view.id)}
+            >
+              {view.label}
+            </button>
+          ))}
+        </nav>
       </aside>
 
       <main className={styles.workspace}>
         <header className={styles.pageHeader}>
           <div>
-            <h1>Clients</h1>
+            <h1>
+              <span className={styles.desktopTitle}>Clients</span>
+              <span className={styles.mobileTitle}>{views.find((view) => view.id === activeView)?.label}</span>
+            </h1>
             <p>View and manage your clients and time tracking.</p>
-          </div>
-          <div className={styles.profile} aria-label="Chronos workspace">
-            <span className={styles.avatar} aria-hidden="true">C</span>
-            <span>Workspace</span>
           </div>
         </header>
 
         <div className={styles.content}>
-          <section id="clients" className={`${styles.section} ${styles.clientsSection}`}>
+          <section id="clients" className={`${styles.section} ${styles.clientsSection} ${activeView !== 'clients' ? styles.mobileHidden : ''}`}>
           <ClientListView addItem={addItem} deleteItem={deleteItem} items={items} loading={loading} />
           </section>
 
-          <section id="register-time" className={`${styles.section} ${styles.registerSection}`}>
-          <RegisterTimeView items={items} registeredEntries={registeredEntries} onRegister={onRegisterTime} />
+          <section id="register-time" className={`${styles.section} ${styles.registerSection} ${activeView !== 'register-time' ? styles.mobileHidden : ''}`}>
+          <RegisterTimeView items={items} registeredEntries={registeredEntries} onRegister={onRegisterTime} onShowClients={() => setActiveView('clients')} />
           </section>
 
-          <section id="report" className={`${styles.section} ${styles.reportSection}`}>
+          <section id="report" className={`${styles.section} ${styles.reportSection} ${activeView !== 'report' ? styles.mobileHidden : ''}`}>
           <TimeReportView
             registeredEntries={registeredEntries}
             startDate={startDate}
