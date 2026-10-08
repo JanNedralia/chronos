@@ -61,9 +61,14 @@
   background: rgba(142, 47, 58, 0.22);
 }
 
-.deleteButton:hover {
+.deleteButton:not(:disabled):hover {
   border-color: rgba(240, 120, 130, 0.55);
   background: rgba(142, 47, 58, 0.38);
+}
+
+.deleteButton:disabled {
+  cursor: wait;
+  opacity: 0.7;
 }
 
 .icon {
