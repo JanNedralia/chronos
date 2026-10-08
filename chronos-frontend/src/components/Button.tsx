@@ -64,13 +64,15 @@ function TrashIcon() {
 
 export function DeleteButton(props: ButtonProps) {
     const onClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        props.action(event)
+        if (!props.loading) {
+            props.action(event)
+        }
     }
 
     return (
         <>
-            <button aria-label={props.text || "Delete"} title={props.text || "Delete"} className={styles.deleteButton} onClick={onClick}>
-                {props.text || <TrashIcon />}
+            <button disabled={props.loading} aria-busy={props.loading} aria-label={props.loading ? "Deleting…" : props.text || "Delete"} title={props.loading ? "Deleting…" : props.text || "Delete"} className={styles.deleteButton} onClick={onClick}>
+                {props.loading ? <Loader color="currentColor" size={4} margin={2} /> : props.text || <TrashIcon />}
             </button>
         </>
     )

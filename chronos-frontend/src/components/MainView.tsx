@@ -49,6 +49,8 @@ export default function MainView() {
   const [startDate, setStartDate] = useState(() => turnDateIntoString(getStartOfMonth(new Date())))
   const [endDate, setEndDate] = useState(() => turnDateIntoString(getEndOfMonth(new Date())))
   const latestEntriesRequest = useRef(0)
+  const pendingEntryDeletions = useRef(new Set<string>())
+  const [deletingEntryIds, setDeletingEntryIds] = useState<ReadonlySet<string>>(new Set())
 
   /**
    * Logout the user by removing the access token and user ID from local storage
@@ -225,15 +227,29 @@ export default function MainView() {
   }, [refreshClientList, items])
 
   const deleteEntry = useCallback(async (entryId: string) => {
-    const api = new API()
-    const response = await api.deleteTimeEntry(entryId)
-
-    if (response.error) {
-      console.error(response.error)
+    if (pendingEntryDeletions.current.has(entryId)) {
       return
     }
 
-    await refreshTimeEntries()
+    pendingEntryDeletions.current.add(entryId)
+    setDeletingEntryIds(new Set(pendingEntryDeletions.current))
+
+    try {
+      const api = new API()
+      const response = await api.deleteTimeEntry(entryId)
+
+      if (response.error) {
+        console.error(response.error)
+        return
+      }
+
+      await refreshTimeEntries()
+    } catch (error) {
+      console.error(error)
+    } finally {
+      pendingEntryDeletions.current.delete(entryId)
+      setDeletingEntryIds(new Set(pendingEntryDeletions.current))
+    }
   }, [refreshTimeEntries])
 
   const handleChangeDateRange = useCallback((from: string, to: string) => {
@@ -330,6 +346,7 @@ export default function MainView() {
             startDate={startDate}
             endDate={endDate}
             onDelete={deleteEntry}
+            deletingEntryIds={deletingEntryIds}
             onSetNewDateRange={handleChangeDateRange}
           />
           </section>

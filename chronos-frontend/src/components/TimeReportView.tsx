@@ -56,7 +56,7 @@ function TableWithDate({ id, projects }: Entry) {
  * @param registeredEntries
  * @returns 
  */
-function AllEntryReport({ registeredEntries, onDelete }: { registeredEntries: Array<RegisteredEntry>, onDelete?: (entryId: string) => void }) {
+function AllEntryReport({ registeredEntries, onDelete, deletingEntryIds }: { registeredEntries: Array<RegisteredEntry>, onDelete?: (entryId: string) => void, deletingEntryIds?: ReadonlySet<string> }) {
   const sortedEntries = [...registeredEntries].sort((a, b) => {
     if (a.date < b.date) {
       return -1
@@ -78,13 +78,13 @@ function AllEntryReport({ registeredEntries, onDelete }: { registeredEntries: Ar
         </tr>
       </thead>
       <tbody>
-        {sortedEntries.map((entry, index) => {
+        {sortedEntries.map((entry) => {
           return (
-            <tr key={index}>
+            <tr key={entry.entryId}>
               <td>{entry.project}</td>
               <td>{entry.date.toDateString()}</td>
               <td>{entry.hours}</td>
-              <td className={styles.actionColumn}><DeleteButton action={() => {
+              <td className={styles.actionColumn}><DeleteButton loading={deletingEntryIds?.has(entry.entryId)} action={() => {
                 onDelete?.(entry.entryId)
               }} /></td>
             </tr>
@@ -315,10 +315,11 @@ type TimeReportViewProps = {
   startDate: string,
   endDate: string,
   onDelete?: (entryId: string) => void
+  deletingEntryIds?: ReadonlySet<string>
   onSetNewDateRange?: (from: string, to: string) => void
 }
 
-export function TimeReportView({ registeredEntries, startDate, endDate, onDelete, onSetNewDateRange }: TimeReportViewProps) {
+export function TimeReportView({ registeredEntries, startDate, endDate, onDelete, deletingEntryIds, onSetNewDateRange }: TimeReportViewProps) {
   const [reportStyle, setReportStyle] = useState("daily")
   const projectTotals = Array.from(
     registeredEntries.reduce((totals, entry) => {
@@ -431,7 +432,7 @@ export function TimeReportView({ registeredEntries, startDate, endDate, onDelete
         )}
       </section>
 
-      {reportStyle === "raw" && <AllEntryReport registeredEntries={registeredEntries} onDelete={onDelete} />}
+      {reportStyle === "raw" && <AllEntryReport registeredEntries={registeredEntries} onDelete={onDelete} deletingEntryIds={deletingEntryIds} />}
       {reportStyle === "daily" && <DailyReport registeredEntries={registeredEntries} startDate={startDate} endDate={endDate} />}
       {reportStyle === "weekly" && <WeeklyReport registeredEntries={registeredEntries} />}
       {reportStyle === "monthly" && <MonthlyReport registeredEntries={registeredEntries} />}
